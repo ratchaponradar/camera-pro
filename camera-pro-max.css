@@ -1,0 +1,718 @@
+/* =====================================================
+   ROOT VARIABLES
+===================================================== */
+:root {
+    --ios-blue: #007AFF;
+}
+
+
+
+
+/* =====================================================
+   BASE LAYOUT
+===================================================== */
+body {
+    margin: 0;
+    background: #000;
+    color: #fff;
+    font-family: -apple-system, system-ui, sans-serif;
+
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+
+    /* ห้ามมี overflow:hidden */
+}
+
+
+
+#flashEffect {
+    position: fixed;
+    inset: 0;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    z-index: 99998;
+}
+
+
+/* =====================================================
+   CAMERA VIEW
+===================================================== */
+#camera-view {
+    flex: 1;
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .2s ease;
+}
+
+
+/* =====================================================
+   GRID 3x3
+===================================================== */
+.grid {
+    position: absolute;
+    inset: 0;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+
+    pointer-events: none;
+}
+
+.grid div {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+
+/* =====================================================
+   BOTTOM BAR
+===================================================== */
+.bottom-bar {
+    position: fixed;
+    z-index: 1000;
+}
+
+.shutter-row {
+    display: flex;
+    align-items: center;
+}
+
+/* thumb */
+#preview-thumb {
+    width: 55px;
+    height: 55px;
+    border-radius: 12px;
+    background: #222;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid white;
+}
+
+/* shutter */
+#shutter {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: white;
+    border: 6px solid rgba(255, 255, 255, 0.4);
+}
+
+/* switch */
+.btn {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+
+@media (orientation: landscape) {
+
+    .bottom-bar {
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 120px;
+        background: linear-gradient(to left, rgba(0, 0, 0, 0.8), transparent);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .shutter-row {
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    /* สลับลำดับให้เป็น
+       switch
+       shutter
+       thumb
+    */
+
+    .btn {
+        order: 1;
+    }
+
+    #shutter {
+        order: 2;
+    }
+
+    #preview-thumb {
+        order: 3;
+    }
+
+}
+
+
+.permission-item button {
+    position: relative;
+    z-index: 10;
+}
+
+
+.permission-wrapper {
+    text-align: center;
+    width: 90%;
+    max-width: 900px;
+}
+
+.permission-wrapper h1 {
+    font-size: 40px;
+    margin-bottom: 50px;
+}
+
+.permission-grid {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    /* สำคัญมาก */
+    gap: 10px;
+    margin: 0 auto;
+}
+
+.permission-item {
+    flex: 1;
+    /* ทำให้กว้างเท่ากัน */
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 10px 10px;
+
+    backdrop-filter: blur(12px);
+}
+
+
+.permission-item .icon {
+    font-size: 60px;
+}
+
+.perm-icon {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    opacity: 0.9;
+}
+
+.permission-item button {
+    padding: 5px 8px;
+    border-radius: 20px;
+    border: none;
+    background: white;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: 'Kanit', sans-serif;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+}
+
+.dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: gray;
+}
+
+.dot.ready {
+    background: #4cd964;
+}
+
+
+.rotate-warning {
+    font-family: 'Kanit', sans-serif;
+
+    position: fixed;
+    inset: 0;
+    background: black;
+    color: white;
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 24px;
+    z-index: 99999;
+}
+
+
+
+
+.startup-screen {
+    font-family: 'Kanit', sans-serif;
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, #111 0%, #000 70%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    padding: 10px;
+}
+
+
+
+
+/* กล่องกลาง */
+.status-box {
+    text-align: center;
+    padding: 40px;
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+}
+
+/* หัวข้อ */
+.status-box h1 {
+    font-size: 26px;
+    font-weight: 500;
+    margin-bottom: 30px;
+}
+
+/* ข้อความสถานะ */
+.status-box p {
+    margin: 14px 0;
+    font-size: 16px;
+    opacity: 0.85;
+    letter-spacing: 0.5px;
+}
+
+/* ปุ่ม */
+#enterBtn {
+    margin-top: 30px;
+    padding: 14px 28px;
+    font-size: 16px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: 'Kanit', sans-serif;
+}
+
+
+#enterBtn:hover {
+    transform: scale(1.05);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =====================================================
+   RADAR OVERLAY
+===================================================== */
+
+
+.radar-overlay {
+    position: absolute;
+    bottom: 8vh;
+    left: 50%;
+    translate: -50% 0;
+
+    width: 75%;
+    max-width: 75%;
+    height: 18vh;
+    overflow: hidden;
+    text-align: center;
+    font-family: 'Kanit', sans-serif;
+
+}
+
+
+.overlay-content {
+    align-items: center;
+    gap: 0.5vw;
+    display: flex;
+    flex-direction: row;   /* ค่า default */
+    align-items: center;   /* ทำให้ทุกอย่างกึ่งกลางแนวตั้ง */
+    justify-content: center;
+    
+}
+
+
+.title{
+    font-size: 28px;
+    margin-bottom: -10px;   /* หรือ -1vh */
+}
+.title-main{
+    font-size: 13px;
+    padding-block: 0px;
+    margin-bottom: -5px;
+}
+.subtitle{
+    font-size: 16px;
+    padding-block: 0px;
+     margin-bottom: 3px;
+}
+
+.divider-vertical {
+    width: 4px;
+    height: 60px;          /* ปรับความสูงได้ */
+    background: rgb(255, 255, 255);
+    margin: 0 10px;        /* ระยะห่างซ้ายขวา */
+}
+
+
+
+.col-1 {
+    display: flex;
+    align-items: center;   /* ทำให้ทุกอย่างกึ่งกลางแนวตั้ง */
+    justify-content: center;
+    
+    height: 60px;
+    padding-block: 5px;
+    
+    min-width: 70%;
+    background: rgba(58, 58, 58, 0.85);
+    border-radius: 50px;
+    
+    
+    
+    font-family: 'Kanit', sans-serif;
+}
+
+.col-title{
+
+    justify-content: center;
+    align-items: center;
+}
+
+.col-time{
+    justify-content: center;
+    align-items: center;
+}
+
+
+.date {
+    font-size: 16px;
+    padding-block: 0px;
+    margin-bottom: -5px;
+}
+
+.time {
+    font-size: 35px;
+    font-weight: 700;
+    padding-block: 0px;
+    margin-top: -15px;
+    margin-bottom: -10px;
+}
+
+.minute {
+    font-size: 25px;
+    margin-left: 0.5vw;
+}
+
+
+
+
+.col-2 {
+    display: flex;
+    align-items: center;   /* ทำให้ทุกอย่างกึ่งกลางแนวตั้ง */
+  
+    height: 60px;
+    padding-block: 5px;
+    background: rgba(58, 58, 58, 0.85);
+    width: auto;
+    border-radius: 50px;
+    gap: 0.5vw;
+}
+
+
+
+/* =====================================================
+   COMPASS
+===================================================== */
+.compass-container {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    padding-inline: 5px;
+}
+
+#compassWheel {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.1s linear;
+}
+
+.compass-pointer {
+    position: absolute;
+    top: 0px;
+    left: 50%;
+
+    width: 2px;
+    height: 6px;
+
+    background: rgb(255, 35, 35);
+    transform: translateX(-50%);
+}
+
+.compass-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    text-align: center;
+    pointer-events: none;
+}
+
+#dirLetter {
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+}
+
+#dirDegree {
+    font-size: 18px;
+    color: #00ffff;
+}
+
+.direction-main{
+    padding-top: 3px;
+    padding-left: 18px;
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 550;
+    
+}
+.direction-main1{
+    font-size: 20px;
+    padding-left: 18px;
+    line-height: 1;
+}
+
+/* =====================================================
+   LANDSCAPE MODE
+===================================================== */
+@media (orientation: landscape) {
+
+    body {
+        flex-direction: row;
+    }
+
+    .bottom-bar {
+        width: 120px;
+        height: 100vh;
+        justify-content: center;
+    }
+
+    .shutter-row {
+        flex-direction: column;
+        justify-content: space-around;
+        height: 100%;
+    }
+
+    .zoom-controls {
+        flex-direction: column-reverse;
+        right: 16px;
+        left: auto;
+        top: 50%;
+        bottom: auto;
+        transform: translateY(-50%);
+    }
+}
+
+
+/* ===============================
+   GALLERY MODAL
+================================ */
+.gallery-modal {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+
+    height: 100dvh;
+    z-index: 9999;
+    font-family: 'Kanit', sans-serif;
+}
+
+/* Header */
+.gallery-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 38px;
+
+    background: rgba(20, 20, 20, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Title */
+.gallery-title {
+    text-align: center;
+    font-weight: 600;
+    font-size: 18px;
+    font-family: 'Kanit', sans-serif;
+}
+
+.selected-count {
+    font-size: 12px;
+    opacity: 0.6;
+    margin-top: 2px;
+    font-family: 'Kanit', sans-serif;
+}
+
+/* Buttons */
+.btn-text {
+    background: none;
+    border: none;
+    color: #fc1e1e;
+    font-size: 15px;
+    font-family: 'Kanit', sans-serif;
+}
+
+.btn-primary {
+    background: #666666;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 18px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.2s;
+    font-family: 'Kanit', sans-serif;
+}
+.btn-1 {
+    background: #ff4040;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 18px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.2s;
+    font-weight: 600;
+    font-family: 'Kanit', sans-serif;
+}
+
+.btn-primary:disabled {
+    opacity: 0.4;
+}
+
+/* Grid */
+.gallery-grid {
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 10px;
+    align-items: start;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+.gallery-grid .item {
+    position: relative;
+    /* 🔥 สำคัญ */
+    width: 100%;
+    padding: 0px;
+    line-height: 0;
+}
+
+.gallery-grid .item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    /* 🔥 ตัวแก้จริง */
+}
+
+
+.download-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 5;
+
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(8px);
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.download-btn:active {
+    transform: scale(0.9);
+    background: rgba(0, 0, 0, 0.6);
+}
+
+
+.gallery-grid img {
+    width: 100%;
+    height: auto;
+    /* 🔥 สำคัญ */
+    display: block;
+    border-radius: 12px;
+}
+
+
+
+/* =====================================================
+   CANVAS (Processing Only)
+===================================================== */
+canvas {
+    display: none;
+}
