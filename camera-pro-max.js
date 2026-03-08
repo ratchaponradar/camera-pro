@@ -273,11 +273,22 @@ function updateDotStatus(dotId, textId, condition, okMsg, errMsg = "") {
  */
 function updateClock() {
     const now = new Date();
-    const dateStr = now.toLocaleDateString("th-TH", { day: "2-digit", month: "long", year: "numeric" });
-    const timeStr = now.toLocaleTimeString("th-TH", { hour: "2-digit", minute: "2-digit", hour12: false });
+
+    const dateStr = now.toLocaleDateString("th-TH", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
+
+    const timeStr = now.toLocaleTimeString("th-TH", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+    });
 
     const dEl = document.getElementById("dateText");
     const tEl = document.getElementById("timeText");
+
     if (dEl) dEl.textContent = dateStr;
     if (tEl) tEl.textContent = timeStr;
 }
@@ -430,6 +441,38 @@ function renderGallery() {
 
 
 
+/**
+ * คัดลอกข้อความ
+ */
+
+function radarCopyCode() {
+
+    const dateText = document.getElementById("dateText").textContent;
+
+    const text =
+        `ภาพท้องฟ้า 4 ทิศ สรก.
+ขณะปล่อยบอลลูนตรวจสภาพอากาศ
+วันที่ ${dateText}`;
+
+    navigator.clipboard.writeText(text);
+
+    const btn = document.getElementById("radarCopyBtn");
+    const icon = document.getElementById("radarCopyIcon");
+    const check = document.getElementById("radarCheckIcon");
+
+    btn.classList.add("copied");
+
+    icon.style.display = "none";
+    check.style.display = "inline";
+
+    setTimeout(() => {
+        btn.classList.remove("copied");
+        icon.style.display = "inline";
+        check.style.display = "none";
+    }, 2000);
+
+}
+
 
 
 /**
@@ -505,6 +548,7 @@ window.addEventListener("load", () => {
     refreshSystemState();
     initCamera();
 });
+
 
 
 
