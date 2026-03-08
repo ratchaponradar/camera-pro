@@ -580,15 +580,18 @@ video {
     top: 0;
     z-index: 10;
 
-    display: flex;
-    align-items: center;
+    display:grid;
     justify-content: space-between;
 
-    padding: 18px 38px;
 
     background: rgba(20, 20, 20, 0.8);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    grid-template-columns: 1fr auto 1fr;
+    align-items:center;
+    padding:10px 14px;
+
 }
 
 /* Title */
@@ -598,6 +601,22 @@ video {
     font-size: 18px;
     font-family: 'Kanit', sans-serif;
 }
+
+
+.header-left{
+    margin-left: 20px;
+    justify-self:start;
+}
+
+.header-right{
+    justify-self:end;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-right: 20px;
+}
+
+
 
 .selected-count {
     font-size: 12px;
@@ -615,17 +634,8 @@ video {
     font-family: 'Kanit', sans-serif;
 }
 
-.btn-primary {
-    background: #666666;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 18px;
-    color: white;
-    font-size: 14px;
-    font-weight: 500;
-    transition: 0.2s;
-    font-family: 'Kanit', sans-serif;
-}
+
+/* ปุ่มปิด */
 .btn-1 {
     background: #ff4040;
     border: none;
@@ -639,9 +649,64 @@ video {
     font-family: 'Kanit', sans-serif;
 }
 
+
+/* ปุ่มคัดลอก */
+
+.radar-copy-btn{
+    background: #666666;
+    border: none;
+    width: 40px;
+    height: 100%;
+    padding: 6px 14px;
+    border-radius: 18px;
+    color: white;
+    transition: 0.2s;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+}
+
+.radar-copy-btn:hover{
+    background:#666666;
+}
+
+.radar-copy-btn.copied{
+    background: #666666;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 18px;
+    font-size: 17px;
+    color:#4ade80;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+}
+
+
+
+/* ปุ่มเวอร์ชั่น */
+
+.btn-primary {
+    background: #666666;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 18px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.2s;
+    font-family: 'Kanit', sans-serif;
+}
+
 .btn-primary:disabled {
     opacity: 0.4;
 }
+
+
+
 
 /* Grid */
 .gallery-grid {
@@ -719,5 +784,6 @@ canvas {
     display: none;
 
 }
+
 
 
