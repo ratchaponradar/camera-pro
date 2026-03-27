@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+    <title>Camera Pro Max - Radar Station</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <link rel="stylesheet" href="camera-pro-max.css">
+</head>
+
+<body>
+
+    <div class="startup-screen" id="startupScreen">
+        <div class="permission-wrapper">
+            <h1>ตั้งค่าระบบ<br>Camera Pro</h1>
+            
+            <div class="permission-grid">
+                <div class="permission-item">
+                    <img src="camera.png" class="perm-icon">
+                    <div class="status">
+                        <span class="dot" id="camDot"></span>
+                        <span id="camText">รอกล้อง</span>
+                    </div>
+                    <button id="cameraBtn" onclick="initCamera()">เปิดกล้อง</button>
+                </div>
+
+                <div class="permission-item">
+                    <img src="compassi.png" class="perm-icon">
+                    <div class="status">
+                        <span class="dot" id="compassDot"></span>
+                        <span id="compassText">รอเข็มทิศ</span>
+                    </div>
+                    <button id="enableCompassBtn">เปิดเข็มทิศ</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="rotate-warning" id="rotateWarning">
+        <div>
+            <img src="rotate.png" class="perm-icon">
+            <p>กรุณาหมุนโทรศัพท์แนวนอน (หมุนซ้าย)<br>เพื่อเริ่มการใช้งาน</p>
+        </div>
+    </div>
+    <div id="flashEffect"></div>
+
+
+    <div id="camera-view">
+        <video id="video" autoplay playsinline></video>
+
+        <div class="grid">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+
+
+        <div class="radar-overlay">
+
+
+
+
+
+
+            <div class="overlay-content">
+                <div class="col-1">
+                    <div class="col-title">
+                       
+                            <div class="title">
+                                ภาพท้องฟ้า 4 ทิศ
+                            </div>
+                            <!--<div class="title-main">
+                                ขณะปล่อยบอลลูนตรวจสภาพอากาศ
+                            </div>-->
+                            <div class="subtitle">
+                                สถานีเรดาร์ฝนหลวงร้องกวาง
+                            </div>
+                        
+                    </div>
+                    <div class="divider-vertical"></div>
+
+                    <div class="col-time">
+                        <div class="date" id="dateText">55 พฤษจิกายน 2569</div>
+                        <div class="time">
+                            <span id="timeText">99:99</span>
+                            <span class="minute"> น.</span>
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="col-2">
+                    <div class="col-2-2">
+                        <div class="direction-main" id="directionText">ทิศตะวันออก<br>เฉียงเหนือ</div>
+                        <div class="direction-main1" id="degreeText">(360°)</div>
+                    </div>
+                    <div class="col">
+                        <div class="compass-container">
+                            <img src="compass.png" id="compassWheel" alt="Compass">
+                            <div class="compass-center">
+                                <div id="dirLetter">WN</div>
+                            </div>
+                            <div class="compass-pointer"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="bottom-bar">
+        <div class="shutter-row">
+            <div id="preview-thumb"></div>
+
+            <button id="shutter" aria-label="Take Photo"></button>
+
+            <button class="btn btn-icon" onclick="switchFacing()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15">
+                    </path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div id="galleryModal" class="gallery-modal">
+
+        <div class="gallery-header">
+            <div class="header-left">
+                <button id="closeGallery" class="btn-1">ปิด</button>
+            </div>
+
+            <div class="gallery-title">
+                คลังภาพ
+            </div>
+
+            <div class="header-right">
+                <button id="radarCopyBtn" class="radar-copy-btn" onclick="radarCopyCode()">
+                    <span id="radarCopyIcon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24" width="18">
+                            <rect x="9" y="9" width="13" height="13" rx="2" />
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                        </svg>
+                    </span>
+                    <span id="radarCheckIcon" style="display:none;">✓</span>
+                </button>
+                <button id="downloadSelected" class="btn-primary " disabled>
+                    V.1.2.0
+                </button>
+            </div>
+        </div>
+
+        <div id="gallery" class="gallery-grid"></div>
+
+    </div>
+
+    <canvas id="canvas"></canvas>
+
+    <script src="camera-pro-max.js"></script>
+
+</body>
+
+</html>
